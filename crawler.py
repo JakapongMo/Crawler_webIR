@@ -53,44 +53,48 @@ for url in urls:
     url = url.strip()
     print("Url : " + url)
     critic_url = url + "/critic-reviews"
+    try:
+        detail, detail_status = get_page(url)
+        critic, critic_status = get_page(critic_url)
 
-    detail, detail_status = get_page(url)
-    critic, critic_status = get_page(critic_url)
+        if detail_status == 200 and critic_status == 200:
+            detail = BeautifulSoup(detail, "html.parser")
 
-    if detail_status == 200 and critic_status == 200:
-        detail = BeautifulSoup(detail, "html.parser")
+            name = ftr.extract_name(detail)
+            platform = ftr.extract_platform(detail)
+            dev = ftr.extract_developer(detail)
+            summary = ftr.extract_summary(detail)
+            genre = ftr.extract_genre(detail)
+            metascore = ftr.extract_metascore(detail)
 
-        name = ftr.extract_name(detail)
-        platform = ftr.extract_platform(detail)
-        dev = ftr.extract_developer(detail)
-        summary = ftr.extract_summary(detail)
-        genre = ftr.extract_genre(detail)
-        metascore = ftr.extract_metascore(detail)
+            soup_critic = BeautifulSoup(critic, "html.parser")
+            list_of_review_dicts = ftr.extract_review_dicts(soup_critic)
 
-        soup_critic = BeautifulSoup(critic, "html.parser")
-        list_of_review_dicts = ftr.extract_review_dicts(soup_critic)
+            # print(name)
+            # print(platform)
+            # print(dev)
+            # print(summary)
+            # print(genre)
+            # print(list_of_review_dicts)
 
-        # print(name)
-        # print(platform)
-        # print(dev)
-        # print(summary)
-        # print(genre)
-        # print(list_of_review_dicts)
+            result = make_json(name, platform, genre, dev, summary, metascore, list_of_review_dicts)
+            results += result
 
-        result = make_json(name, platform, genre, dev, summary, metascore, list_of_review_dicts)
-        results += result
+            with open("result.txt", "a", encoding="utf-8") as f:
+                f.write(str(result))
 
-        with open("result.txt", "a", encoding="utf-8") as f:
-           f.write(str(result))
+            with open("error.txt", "w") as f:
+                f.write(str(error_url))
 
+            count_pass += 1
+        count_all += 1
+        with open("count.txt", "w") as f:
+            f.writelines(str(count_pass) + "\n")
+            f.writelines(str(count_all))
+    except:
+        error_url.append(url)
         with open("error.txt", "w") as f:
             f.write(str(error_url))
-
-        count_pass += 1
-    count_all += 1
-    with open("count.txt", "w") as f:
-        f.writelines(str(count_pass) + "\n")
-        f.writelines(str(count_all))
-
+            
 with open("results.txt", "w", encoding="utf-8") as f:
     f.write(str(results))
