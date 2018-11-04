@@ -22,7 +22,7 @@ headers = {
 a = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/", headers=headers)
 critic = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/critic-reviews")
 
-soup = BeautifulSoup(a, "html.parser")
+soup = BeautifulSoup(a.text, "html.parser")
 
 name = ftr.extract_name(soup)
 platform = ftr.extract_platform(soup)
