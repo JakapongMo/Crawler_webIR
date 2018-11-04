@@ -1,4 +1,4 @@
-import requests as r
+import requests
 from bs4 import BeautifulSoup
 import Filterer as ftr
 
@@ -14,36 +14,60 @@ def make_json(name, platform, genre, developer, summary, review, source, url):
     data["Url"] = url
     return data
 
+def get_page(url):
+    global headers
+    text = ""
+    status = ""
+    try:
+        r = requests.get(url, headers=headers, timeout=2)
+        text = r.text
+        status = r.status_code
+    except(KeyboardInterrupt, SystemExit):
+        raise
+    except:
+        print('GET PAGE ERROR!')
+    return text.lower(), status
+
 headers = {
         'User-Agent': 'WebIR Crawler',
         'From': 'Kasetsart University'
         }
 
-a = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/", headers=headers)
-critic = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/critic-reviews")
+with open("urls.txt", "r") as f:
+    urls = f.readlines()
 
-soup = BeautifulSoup(a.text, "html.parser")
+for url in urls:
+    url = url.strip()
+    critic_url = url + "/critic-reviews"
 
-name = ftr.extract_name(soup)
-platform = ftr.extract_platform(soup)
-dev = ftr.extract_developer(soup)
-summary = ftr.extract_summary(soup)
-genre = ftr.extract_genre(soup)
-review = ftr.extract_review(soup)
-source = ftr.extract_source(soup)
-url = ftr.extract_url(soup)
+    detail = get_page(url)
+    critic = get_page(critic_url)
 
-print(name)
-print(platform)
-print(dev)
-print(summary)
-print(genre)
-print(review)
-print(source)
-print(url)
+    detail = BeautifulSoup(detail, "html.parser")
 
-data = make_json(name, platform, genre, dev, summary, review, source, url)
+    name = ftr.extract_name(detail)
+    platform = ftr.extract_platform(detail)
+    dev = ftr.extract_developer(detail)
+    summary = ftr.extract_summary(detail)
+    genre = ftr.extract_genre(detail)
 
-f = open("dict.json", "w")
-f.write(str(data))
-f.close()
+    critic = BeautifulSoup(critic, "html.parser")
+
+    review = ftr.extract_review(critic)
+    source = ftr.extract_source(critic)
+    url = ftr.extract_url(critic)
+
+    print(name)
+    print(platform)
+    print(dev)
+    print(summary)
+    print(genre)
+    print(review)
+    print(source)
+    print(url)
+
+    data = make_json(name, platform, genre, dev, summary, review, source, url)
+
+    f = open("dict.json", "w")
+    f.write(str(data))
+    f.close()
