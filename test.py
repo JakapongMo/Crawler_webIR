@@ -19,17 +19,25 @@ f.close()
 
 soup = BeautifulSoup(a, "html.parser")
 
-name = soup.find("a", {"class" : ["hover_none"]})
-print(name.string.strip())
 
-dev = soup.find("li", {"class" : ["summary_detail developer"]})
-print(dev.find("span", {"class" : "data"}).string.strip())
+#dev = soup.find("li", {"class" : ["summary_detail developer"]})
+#print(dev.find("span", {"class" : "data"}).string.strip())
+
+genre = soup.find("li", {"class" : ["summary_detail product_genre"]})
+children = genre.findChildren("span" , class_= "data",recursive=False)
+list_genre = []
+for child in children:
+        print(child.string.strip())
+        list_genre.append(child.string.strip())
+print(list_genre)
+
+
 
 data = {}
 data["Name"] = ""
 data["Platform"] = ""
 data["Genre"] = ""
-data["Developer"] = dev
+#data["Developer"] = dev
 data["Summary"] = ""
 data["Review"] = {}
 
