@@ -19,7 +19,6 @@ def extract_developer(soup):
 def extract_summary(soup):
     summary = soup.find("li", {"class" : ["summary_detail product_summary"]})
     summary = summary.find("span", {"class" : ["data"]})
-    print(summary)
     if summary.find("span", {"class" : ["blurb blurb_expanded"]}):
         summary = summary.find("span", {"class" : ["blurb blurb_expanded"]})
     else:
@@ -39,10 +38,19 @@ def extract_genre(soup):
 def extract_review_dicts(soup_critic):
     list_of_review_dicts = []
     first_review = soup_critic.find("li", {"class" : ["review critic_review first_review"]})
-    text = first_review.find("div", {"class" : "review_body"}).string.strip()
-    score = first_review.find("div", {"class" : "metascore_w"}).string.strip()
+    try:
+        text = first_review.find("div", {"class" : "review_body"}).string.strip()
+    except AttributeError:
+        text = "no_content"
+    try:
+        score = first_review.find("div", {"class" : "metascore_w"}).string.strip()
+    except AttributeError:
+        score = -1
     source = first_review.find("div", {"class" : "source"}).string.strip()
-    link = first_review.find("a", {"class" : "external"}, href=True)['href']
+    try:
+        link = first_review.find("a", {"class" : "external"}, href=True)['href']
+    except TypeError:
+        link = "no_link"
     review_dict = {}
     review_dict['text'] = text
     review_dict['source'] = source
@@ -55,10 +63,23 @@ def extract_review_dicts(soup_critic):
     reviews = soup_critic.find_all("li", {"class" : ["review critic_review"]})
     for review in reviews:
         review_dict = {}
-        text = review.find("div", {"class" : "review_body"}).string.strip()
-        score = review.find("div", {"class" : "metascore_w"}).string.strip()
+        try:
+            text = review.find("div", {"class" : "review_body"}).string.strip()
+        except AttributeError:
+            continue
+        print (text)
+        try:
+            score = review.find("div", {"class" : "metascore_w"}).string.strip()
+        except AttributeError:
+            score = -1
+        print(score)
         source = review.find("div", {"class" : "source"}).string.strip()
-        link = review.find("a", {"class" : "external"}, href=True)['href']
+        print (source)
+        try:
+            link = review.find("a", {"class" : "external"}, href=True)['href']
+        except TypeError:
+            link = "no_link"
+        print (link)
         review_dict['text'] = text
         review_dict['source'] = source
         review_dict['score_review'] = score
@@ -67,16 +88,24 @@ def extract_review_dicts(soup_critic):
 
     review_dict = {}
     last_review = soup_critic.find("li", {"class" : ["review critic_review last_review"]})
-    text = last_review.find("div", {"class" : "review_body"}).string.strip()
-    score = last_review.find("div", {"class" : "metascore_w"}).string.strip()
+    try:
+        text = last_review.find("div", {"class" : "review_body"}).string.strip()
+    except AttributeError:
+        text = "no_content"
+    try:
+        score = last_review.find("div", {"class" : "metascore_w"}).string.strip()
+    except AttributeError:
+        score = -1
     source = last_review.find("div", {"class" : "source"}).string.strip()
-    link = last_review.find("a", {"class" : "external"}, href=True)['href']
+    try:
+        link = last_review.find("a", {"class" : "external"}, href=True)['href']
+    except TypeError:
+        link = "no_link"
     review_dict['text'] = text
     review_dict['source'] = source
     review_dict['score_review'] = score
     review_dict['url_source'] = link
     list_of_review_dicts.append(review_dict)
-
     return list_of_review_dicts
 
 def extract_metascore(soup):
