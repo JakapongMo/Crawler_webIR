@@ -53,28 +53,28 @@ for url in urls:
     if detail_status == 200 and critic_status == 200:
         detail = BeautifulSoup(detail, "html.parser")
 
-        name = ftr.extract_name(detail)
-        platform = ftr.extract_platform(detail)
-        dev = ftr.extract_developer(detail)
-        summary = ftr.extract_summary(detail)
-        genre = ftr.extract_genre(detail)
-        metascore = ftr.extract_metascore(detail)
+        # name = ftr.extract_name(detail)
+        # platform = ftr.extract_platform(detail)
+        # dev = ftr.extract_developer(detail)
+        # summary = ftr.extract_summary(detail)
+        # genre = ftr.extract_genre(detail)
+        # metascore = ftr.extract_metascore(detail)
 
         soup_critic = BeautifulSoup(critic, "html.parser")
         list_of_review_dicts = ftr.extract_review_dicts(soup_critic)
 
-        print(name)
-        print(platform)
-        print(dev)
-        print(summary)
-        print(genre)
+        # print(name)
+        # print(platform)
+        # print(dev)
+        # print(summary)
+        # print(genre)
         # print(list_of_review_dicts)
 
-        result = make_json(name, platform, genre, dev, summary, metascore, list_of_review_dicts)
-        results += result
+        #result = make_json(name, platform, genre, dev, summary, metascore, list_of_review_dicts)
+        #results += result
 
-        with open("result.txt", "a") as f:
-            f.write(str(result))
+        #with open("result.txt", "a") as f:
+        #    f.write(str(result))
 
 f = open("dict.json", "w")
 f.write(str(results))
