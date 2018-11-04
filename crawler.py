@@ -52,19 +52,15 @@ for url in urls:
     genre = ftr.extract_genre(detail)
 
     critic = BeautifulSoup(critic, "html.parser")
-
-    review = ftr.extract_review(critic)
-    source = ftr.extract_source(critic)
-    url = ftr.extract_url(critic)
+    soup_critic = BeautifulSoup(critic, "html.parser")
+    list_of_review_dicts = ftr.extract_review_dicts(soup_critic)
 
     print(name)
     print(platform)
     print(dev)
     print(summary)
     print(genre)
-    print(review)
-    print(source)
-    print(url)
+    print(list_of_review_dicts)
 
     data = make_json(name, platform, genre, dev, summary, review, source, url)
 
