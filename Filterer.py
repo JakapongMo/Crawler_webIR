@@ -17,7 +17,14 @@ def extract_developer(soup):
     return dev
 
 def extract_summary(soup):
-    summary = soup.find("span", {"class" : ["blurb blurb_expanded"]})
+    summary = soup.find("li", {"class" : ["summary_detail product_summary"]})
+    summary = summary.find("span", {"class" : ["data"]})
+    print(summary)
+    if summary.find("span", {"class" : ["blurb blurb_expanded"]}):
+        summary = summary.find("span", {"class" : ["blurb blurb_expanded"]})
+    else:
+        summary = summary.find("span")
+    print(summary)
     summary = summary.string.strip()
     return summary
 
