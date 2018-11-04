@@ -68,22 +68,55 @@ soup_critic = BeautifulSoup(critic, "html.parser")
 
 
 
-first_review = soup_critic.find_all("li", {"class" : ["review critic_review first_review"]})
-print (len(first_review))
-
+first_review = soup_critic.find("li", {"class" : ["review critic_review first_review"]})
+#print (first_review)
+text = first_review.find("div", {"class" : "review_body"}).string.strip()
+score = first_review.find("div", {"class" : "metascore_w"}).string.strip()
+source = first_review.find("div", {"class" : "source"}).string.strip()
+link = first_review.find("a", {"class" : "external"}, href=True)['href']
+print (text)
+print (score)
+print (source)
+print (link)
+a = r.get(link, headers=headers)
+print (a.status_code)
+print ("=============================")
 reviews = soup_critic.find_all("li", {"class" : ["review critic_review"]})
 #first_review = review.findChildren("li" , class_= "review critic_review first_review",recursive=False)
+
 print (len(reviews))
-'''
+
+
+
 for review in reviews:
-        print(review)
-        print ("====================================")
-print (len(reviews))
-'''
+        text = review.find("div", {"class" : "review_body"}).string.strip()
+        score = review.find("div", {"class" : "metascore_w"}).string.strip()
+        source = review.find("div", {"class" : "source"}).string.strip()
+        link = review.find("a", {"class" : "external"}, href=True)['href']
+        print (text)
+        print (score)
+        print (source)
+        print (link)
+        a = r.get(link, headers=headers)
+        print (a.status_code)
+        print ("=============================")
+#print (len(reviews))
 
 
-last_review = soup_critic.find_all("li", {"class" : ["review critic_review last_review"]})
-print (last_review)
+
+last_review = soup_critic.find("li", {"class" : ["review critic_review last_review"]})
+#print (last_review)
+text = last_review.find("div", {"class" : "review_body"}).string.strip()
+score = last_review.find("div", {"class" : "metascore_w"}).string.strip()
+source = last_review.find("div", {"class" : "source"}).string.strip()
+link = last_review.find("a", {"class" : "external"}, href=True)['href']
+print (text)
+print (score)
+print (source)
+print (link)
+a = r.get(link, headers=headers)
+print (a.status_code)
+print ("=============================")
 f = open("dict.json", "w")
 f.write(str(data))
 f.close()
