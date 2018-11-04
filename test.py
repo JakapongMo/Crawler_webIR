@@ -19,8 +19,8 @@ headers = {
         'From': 'Kasetsart University'
         }
 
-a = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/", headers=headers)
-critic = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/critic-reviews")
+a = r.get("https://www.metacritic.com/game/nintendo-64/the-legend-of-zelda-ocarina-of-time/", headers=headers)
+critic = r.get("https://www.metacritic.com/game/nintendo-64/the-legend-of-zelda-ocarina-of-time/critic-reviews")
 
 soup = BeautifulSoup(a.text, "html.parser")
 

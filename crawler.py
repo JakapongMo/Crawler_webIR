@@ -26,7 +26,7 @@ def get_page(url):
         raise
     except:
         print('GET PAGE ERROR!')
-    return text.lower(), status
+    return text, status
 
 headers = {
         'User-Agent': 'WebIR Crawler',
@@ -38,6 +38,7 @@ with open("urls.txt", "r") as f:
 
 for url in urls:
     url = url.strip()
+    print("Url : " + url)
     critic_url = url + "/critic-reviews"
 
     detail, detail_status = get_page(url)
@@ -47,11 +48,11 @@ for url in urls:
         detail = BeautifulSoup(detail, "html.parser")
 
         name = ftr.extract_name(detail)
-        platform = ftr.extract_platform(detail)
+        # platform = ftr.extract_platform(detail)
         dev = ftr.extract_developer(detail)
         summary = ftr.extract_summary(detail)
         genre = ftr.extract_genre(detail)
-        score = ftr.extract_metascore(detail)
+        metascore = ftr.extract_metascore(detail)
 
         critic = BeautifulSoup(critic, "html.parser")
 
@@ -60,7 +61,7 @@ for url in urls:
         url = ftr.extract_url(critic)
 
         print(name)
-        print(platform)
+        # print(platform)
         print(dev)
         print(summary)
         print(genre)
@@ -69,8 +70,8 @@ for url in urls:
         print(source)
         print(url)
 
-        data = make_json(name, platform, genre, dev, summary, metascore, review, source, url)
+        # data = make_json(name, platform, genre, dev, summary, metascore, review, source, url)
 
-        f = open("dict.json", "w")
-        f.write(str(data))
-        f.close()
+        # f = open("dict.json", "w")
+        # f.write(str(data))
+        # f.close()
