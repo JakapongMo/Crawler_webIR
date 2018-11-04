@@ -26,5 +26,4 @@ for i in range(157):
 
 
 with open("urls.txt", "w") as f:
-    for url in urls:
-        f.write(url + "\n")
+    f.write(str(urls))

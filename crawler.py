@@ -45,8 +45,8 @@ def get_page(url):
         error_url.append(url)
     return text, status
 
-with open("urls.txt", "r") as f:
-    urls = f.readlines()
+with open("j.txt", "r") as f:
+    urls = eval(f.read())
 
 results = []
 for url in urls:
