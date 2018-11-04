@@ -1,5 +1,18 @@
 import requests as r
 from bs4 import BeautifulSoup
+import Filterer as ftr
+
+def make_json(name, platform, genre, developer, summary, review, source, url):
+    data = {}
+    data["Name"] = name
+    data["Platform"] = platform
+    data["Genre"] = ""
+    data["Developer"] = dev
+    data["Summary"] = summary
+    data["Review"] = review
+    data["Source"] = source
+    data["Url"] = url
+    return data
 
 headers = {
         'User-Agent': 'WebIR Crawler',
@@ -9,47 +22,27 @@ headers = {
 a = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/", headers=headers)
 critic = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/critic-reviews")
 
-# f = open("test.html", "w")
-# f.write(a.text)
-# f.close()
-
-# f = open("critic.html", "w")
-# f.write(a.text)
-# f.close()
-
-f = open("test.html", "r")
-a = f.read()
-f.close()
-
-f = open("critic.html", "r")
-critic = f.read()
-f.close()
-
 soup = BeautifulSoup(a, "html.parser")
 
-name = soup.find("a", {"class" : ["hover_none"]})
-name = name.find("h1").string.strip()
+name = ftr.extract_name(soup)
+platform = ftr.extract_platform(soup)
+dev = ftr.extract_developer(soup)
+summary = ftr.extract_summary(soup)
+genre = ftr.extract_genre(soup)
+review = ftr.extract_review(soup)
+source = ftr.extract_source(soup)
+url = ftr.extract_url(soup)
+
 print(name)
-
-platform = soup.find("span", {"class" : ["platform"]})
-platform = platform.find("a").string.strip()
 print(platform)
-
-dev = soup.find("li", {"class" : ["summary_detail developer"]})
-dev = dev.find("span", {"class" : "data"}).string.strip()
 print(dev)
-
-summary = soup.find("span", {"class" : ["blurb blurb_expanded"]})
-summary = summary.string.strip()
 print(summary)
+print(genre)
+print(review)
+print(source)
+print(url)
 
-data = {}
-data["Name"] = name
-data["Platform"] = platform
-data["Genre"] = ""
-data["Developer"] = dev
-data["Summary"] = summary
-data["Review"] = {}
+data = make_json(name, platform, genre, dev, summary, review, source, url)
 
 f = open("dict.json", "w")
 f.write(str(data))
