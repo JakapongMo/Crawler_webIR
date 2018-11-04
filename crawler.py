@@ -91,10 +91,12 @@ for url in urls:
         with open("count.txt", "w") as f:
             f.writelines(str(count_pass) + "\n")
             f.writelines(str(count_all))
+    except(KeyboardInterrupt, SystemExit):
+        raise
     except:
         error_url.append(url)
         with open("error.txt", "w") as f:
             f.write(str(error_url))
-            
+
 with open("results.txt", "w", encoding="utf-8") as f:
     f.write(str(results))
