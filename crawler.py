@@ -92,5 +92,5 @@ for url in urls:
         f.writelines(str(count_pass) + "\n")
         f.writelines(str(count_all))
 
-with open("dict.json", "w", encoding="utf-8") as f:
+with open("results.txt", "w", encoding="utf-8") as f:
     f.write(str(results))
