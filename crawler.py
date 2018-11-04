@@ -2,17 +2,27 @@ import requests
 from bs4 import BeautifulSoup
 import Filterer as ftr
 
-def make_json(name, platform, genre, developer, summary, metascore, review, source, url):
-    data = {}
-    data["Name"] = name
-    data["Platform"] = platform
-    data["Genre"] = ""
-    data["Developer"] = dev
-    data["Summary"] = summary
-    data["Review"] = review
-    data["Source"] = source
-    data["Url"] = url
-    return data
+headers = {
+        'User-Agent': 'WebIR Crawler',
+        'From': 'Kasetsart University'
+        }
+
+def make_json(name, platform, genre, developer, summary, metascore, list_of_review_dicts):
+    result = []
+    for review in list_of_review_dicts:
+        data = {}
+        data["Name"] = name
+        data["Platform"] = platform
+        data["Genre"] = genre
+        data["Developer"] = dev
+        data["Summary"] = summary
+        data["Metascore"] = metascore
+        data["Review"] = review["text"]
+        data["Source"] = review["source"]
+        data["Url"] = review["url_source"]
+        data["Review_score"] = review["score_review"]
+        result.append(data)
+    return result
 
 def get_page(url):
     global headers
@@ -28,14 +38,10 @@ def get_page(url):
         print('GET PAGE ERROR!')
     return text, status
 
-headers = {
-        'User-Agent': 'WebIR Crawler',
-        'From': 'Kasetsart University'
-        }
-
 with open("urls.txt", "r") as f:
     urls = f.readlines()
 
+results = []
 for url in urls:
     url = url.strip()
     print("Url : " + url)
@@ -48,30 +54,28 @@ for url in urls:
         detail = BeautifulSoup(detail, "html.parser")
 
         name = ftr.extract_name(detail)
-        # platform = ftr.extract_platform(detail)
+        platform = ftr.extract_platform(detail)
         dev = ftr.extract_developer(detail)
         summary = ftr.extract_summary(detail)
         genre = ftr.extract_genre(detail)
         metascore = ftr.extract_metascore(detail)
 
-        critic = BeautifulSoup(critic, "html.parser")
-
-        review = ftr.extract_review(critic)
-        source = ftr.extract_source(critic)
-        url = ftr.extract_url(critic)
+        soup_critic = BeautifulSoup(critic, "html.parser")
+        list_of_review_dicts = ftr.extract_review_dicts(soup_critic)
 
         print(name)
-        # print(platform)
+        print(platform)
         print(dev)
         print(summary)
         print(genre)
-        print(metascore)
-        print(review)
-        print(source)
-        print(url)
+        # print(list_of_review_dicts)
 
-        # data = make_json(name, platform, genre, dev, summary, metascore, review, source, url)
+        result = make_json(name, platform, genre, dev, summary, metascore, list_of_review_dicts)
+        results += result
 
-        # f = open("dict.json", "w")
-        # f.write(str(data))
-        # f.close()
+        with open("result.txt", "a") as f:
+            f.write(str(result))
+
+f = open("dict.json", "w")
+f.write(str(results))
+f.close()
