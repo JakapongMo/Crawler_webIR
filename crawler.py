@@ -42,10 +42,9 @@ def get_page(url):
         raise
     except:
         print('GET PAGE ERROR!')
-        error_url.append(url)
     return text, status
 
-with open("j.txt", "r") as f:
+with open("error1.txt", "r") as f:
     urls = eval(f.read())
 
 results = []
@@ -83,20 +82,19 @@ for url in urls:
             with open("result.txt", "a", encoding="utf-8") as f:
                 f.write(str(result))
 
-            with open("error.txt", "w") as f:
-                f.write(str(error_url))
-
             count_pass += 1
-        count_all += 1
-        with open("count.txt", "w") as f:
-            f.writelines(str(count_pass) + "\n")
-            f.writelines(str(count_all))
+        else:
+            error_url.append(url)
     except(KeyboardInterrupt, SystemExit):
         raise
     except:
         error_url.append(url)
-        with open("error.txt", "w") as f:
-            f.write(str(error_url))
+    with open("error.txt", "w") as f:
+        f.write(str(error_url))
+    count_all += 1
+    with open("count.txt", "w") as f:
+        f.writelines(str(count_pass) + "\n")
+        f.writelines(str(count_all))
 
 with open("results.txt", "w", encoding="utf-8") as f:
     f.write(str(results))
