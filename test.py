@@ -22,7 +22,12 @@ headers = {
 a = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/", headers=headers)
 critic = r.get("https://www.metacritic.com/game/xbox-one/red-dead-redemption-2/critic-reviews", headers=headers)
 
-soup = BeautifulSoup(a, "html.parser")
+soup = BeautifulSoup(a.text, "html.parser")
+
+score = soup.find("span", {"itemprop" : ["ratingValue"]})
+score = score.string.strip()
+print(score)
+print("Metascore: ")
 
 genre = soup.find("li", {"class" : ["summary_detail product_genre"]})
 children = genre.findChildren("span" , class_= "data",recursive=False)

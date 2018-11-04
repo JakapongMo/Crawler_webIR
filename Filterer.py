@@ -69,3 +69,8 @@ def extract_review_dicts(soup_critic):
     list_of_review_dicts.append(review_dict)
 
     return list_of_review_dicts
+
+def extract_metascore(soup):
+    score = soup.find("span", {"itemprop" : ["ratingValue"]})
+    score = score.string.strip()
+    return score

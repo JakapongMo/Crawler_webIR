@@ -24,6 +24,7 @@ for i in range(157):
     except:
         print("Error!!!")
 
+
 with open("urls.txt", "w") as f:
     for url in urls:
         f.write(url + "\n")
