@@ -29,3 +29,8 @@ def extract_source(soup):
 
 def extract_url(soup):
     return ""
+
+def extract_metascore(soup):
+    score = soup.find("span", {"itemprop" : ["ratingValue"]})
+    score = score.string.strip()
+    return score

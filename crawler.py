@@ -50,6 +50,7 @@ for url in urls:
     dev = ftr.extract_developer(detail)
     summary = ftr.extract_summary(detail)
     genre = ftr.extract_genre(detail)
+    score = ftr.extract_metascore(detail)
 
     critic = BeautifulSoup(critic, "html.parser")
 
