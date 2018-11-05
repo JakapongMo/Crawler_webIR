@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import Filterer as ftr
 import time
+import json
 
 headers = {
         'User-Agent': 'WebIR Crawler',
@@ -44,14 +45,16 @@ def get_page(url):
         print('GET PAGE ERROR!')
     return text, status
 
-with open("error1.txt", "r") as f:
+
+with open("mo.txt", "r") as f:
     urls = eval(f.read())
 
 results = []
 for url in urls:
     url = url.strip()
     print("Url : " + url)
-    critic_url = url + "/critic-reviews"
+    #critic_url = url + "/critic-reviews"
+    critic_url = url
     try:
         detail, detail_status = get_page(url)
         critic, critic_status = get_page(critic_url)
@@ -79,8 +82,8 @@ for url in urls:
             result = make_json(name, platform, genre, dev, summary, metascore, list_of_review_dicts)
             results += result
 
-            with open("result.txt", "a", encoding="utf-8") as f:
-                f.write(str(result))
+            with open("result.json", "a", encoding="utf-8") as f:
+                json.dump(result, f)
 
             count_pass += 1
         else:
@@ -96,5 +99,5 @@ for url in urls:
         f.writelines(str(count_pass) + "\n")
         f.writelines(str(count_all))
 
-with open("results.txt", "w", encoding="utf-8") as f:
-    f.write(str(results))
+with open("results.json", "w", encoding="utf-8") as f:
+    json.dump(results, f)
